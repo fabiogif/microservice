@@ -14,23 +14,23 @@ use stdClass;
 
 class CreateCategoryUseCaseUnitTest extends TestCase
 {
-    public function testCreateNewCategory()
+      public function testCreateNewCategory()
     {
         $uuid = (string)Uuid::uuid4()->toString();
-        $categoryName = 'Outros CAT';
+        $categoryName = 'Category Name';
+     
+        $mockEntity = Mockery::mock(Category::class, [$uuid, $categoryName]);
+        $mockEntity->shouldReceive('id')->andReturn($uuid);
 
-        $this->mockEntity = Mockery::mock(Category::class, [$uuid, $categoryName]);
-        $this->mockEntity->shouldReceive('id')->andReturn($uuid);
 
+        $mockRepo = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
+        $mockRepo->shouldReceive('insert')->andReturn($mockEntity);
 
-        $this->mockRepo = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
-        $this->mockRepo->shouldReceive('insert')->andReturn($this->mockEntity);
+        $mockInputDto = Mockery::mock(CategoryCreateDtoInput::class, [$categoryName]);
 
-        $this->mockInputDto = Mockery::mock(CategoryCreateDtoInput::class, [$categoryName]);
+        $useCase = new CreateCategoryUseCase($mockRepo);
 
-        $useCase = new CreateCategoryUseCase($this->mockRepo);
-
-        $reponseUseCase = $useCase->execute($this->mockInputDto);
+        $reponseUseCase = $useCase->execute($mockInputDto);
 
         $this->assertInstanceOf(CategoryCreateOutputDto::class, $reponseUseCase);
         $this->assertEquals($categoryName, $reponseUseCase->name);

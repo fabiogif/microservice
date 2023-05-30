@@ -12,8 +12,6 @@ use Core\UseCase\DTO\Category\{
 class CreateCategoryUseCase
 {
 
-    //protected $repository;
-
     public function __construct(protected CategoryRepositoryInterface $repository)
     {
         $this->repository = $repository;
