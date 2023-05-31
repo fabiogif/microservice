@@ -5,7 +5,7 @@ namespace Tests\Unit\UseCase\Category;
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\UseCase\Category\CreateCategoryUseCase;
-use Core\UseCase\DTO\Category\CategoryCreateDtoInput;
+use Core\UseCase\DTO\Category\CategoryCreateInputDto;
 use Core\UseCase\DTO\Category\CategoryCreateOutputDto;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -24,9 +24,9 @@ class CreateCategoryUseCaseUnitTest extends TestCase
 
 
         $mockRepo = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
-        $mockRepo->shouldReceive('insert')->andReturn($mockEntity);
+        $mockRepo->shouldReceive('insert')->times(1)->andReturn($mockEntity);
 
-        $mockInputDto = Mockery::mock(CategoryCreateDtoInput::class, [$categoryName]);
+        $mockInputDto = Mockery::mock(CategoryCreateInputDto::class, [$categoryName]);
 
         $useCase = new CreateCategoryUseCase($mockRepo);
 
@@ -35,6 +35,7 @@ class CreateCategoryUseCaseUnitTest extends TestCase
         $this->assertInstanceOf(CategoryCreateOutputDto::class, $reponseUseCase);
         $this->assertEquals($categoryName, $reponseUseCase->name);
         $this->assertEquals('', $reponseUseCase->description);
+
 
         Mockery::close();
     }

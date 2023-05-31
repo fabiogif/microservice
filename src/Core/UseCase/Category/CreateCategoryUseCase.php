@@ -5,7 +5,7 @@ namespace Core\UseCase\Category;
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\UseCase\DTO\Category\{
-    CategoryCreateDtoInput,
+    CategoryCreateInputDto,
     CategoryCreateOutputDto
 };
 
@@ -17,14 +17,13 @@ class CreateCategoryUseCase
         $this->repository = $repository;
     }
 
-    public function execute(CategoryCreateDtoInput $input): CategoryCreateOutputDto
+    public function execute(CategoryCreateInputDto $input): CategoryCreateOutputDto
     {
         $category = new Category(
             name: $input->name,
             description: $input->description,
-            isActive: $input->is_active,
+            isActive: $input->isActive,
         );
-
         $newCategory =  $this->repository->insert($category);
 
         return new CategoryCreateOutputDto(
