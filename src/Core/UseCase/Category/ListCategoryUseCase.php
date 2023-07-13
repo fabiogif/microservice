@@ -4,7 +4,6 @@ namespace Core\UseCase\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\UseCase\DTO\Category\CategoryInputDto;
 use Core\UseCase\DTO\Category\CategoryOutputDto;
-use Core\UseCase\DTO\Category\CategoryOutupDto;
 
 class ListCategoryUseCase {
 
@@ -13,10 +12,10 @@ class ListCategoryUseCase {
         $this->repository = $repository;
     } 
 
-    public function execute(CategoryInputDto $input): CategoryOutputDto
+    public function execute(CategoryInputDto $items): CategoryOutputDto
     {
 
-         $category = $this->repository->findById($input->id);
+         $category = $this->repository->findById($items);
 
          return new CategoryOutputDto(
             id: $category->id,
