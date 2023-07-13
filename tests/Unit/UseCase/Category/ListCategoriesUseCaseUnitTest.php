@@ -14,25 +14,42 @@ class ListCategoriesUseCaseUnitTest extends TestCase
 {
     public function testListCategoriesEmpty()
     {
-        $mock = Mockery::mock('MyClass');
-        $mock->shouldReceive('name_of_method');
 
+        $mockPagination = $this->mockPagination();
 
-        $mockPagination = Mockery::mock(stdClass::class, PaginationInterface::class);
-        $mockPagination->shouldReceive('items')->andReturn([]);
+        $this->mockRepo = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
 
-        $mockRepo = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
-        $mockRepo->shouldReceive('paginate')->andReturn($mockPagination);
+        $this->mockRepo->shouldReceive('paginate')->andReturn($mockPagination);
 
-        $mockInputDto = Mockery::mock(ListCategoriesInputDto::class, ['filter'. 'order']);
+        $this->mockInputDto = Mockery::mock(ListCategoriesInputDto::class, ['filter', 'desc']);
 
-        $useCase = new ListCategoriesUseCase($mockRepo);
-        $responseUseCase = $useCase->execute($mockInputDto);
+        $useCase = new ListCategoriesUseCase($this->mockRepo);
 
-        $this->assertInstanceOf(ListCategoriesOutputDto::class, $responseUseCase);
-        $this->assertCount(0, count($responseUseCase->items));
+        $resposeUseCase = $useCase->execute($this->mockInputDto);
+
+        $this->assertCount(0,$resposeUseCase->items);
+        $this->assertInstanceOf(ListCategoriesOutputDto::class, $resposeUseCase);
+    }
+
+    protected function mockPagination()
+    {
+        $this->mockPagination = Mockery::mock(stdClass::class, PaginationInterface::class);
+        $this->mockPagination->shouldReceive('items')->andReturn([]);
+        $this->mockPagination->shouldReceive('total')->andReturn(0);
+        $this->mockPagination->shouldReceive('lastPage')->andReturn(0);
+        $this->mockPagination->shouldReceive('firstPage')->andReturn(0);
+        $this->mockPagination->shouldReceive('perPage')->andReturn(0);
+        $this->mockPagination->shouldReceive('to')->andReturn(0);
+        $this->mockPagination->shouldReceive('from')->andReturn(0);
+
+        return $this->mockPagination;
 
     }
 
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
 
 }

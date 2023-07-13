@@ -5,10 +5,13 @@ namespace Core\UseCase\DTO\Category;
 class ListCategoriesOutputDto
 {
     public function __construct(
-        public string $filter = '',
-        public string $order = 'DESC',
-        public int $page = 1,
-        public int $totalPage = 15,
+        public array $items,
+        public int $total,
+        public int $last_page,
+        public int $first_page,
+        public int $per_page,
+        public int $to,
+        public int $from,
     ) {
     }
 }
