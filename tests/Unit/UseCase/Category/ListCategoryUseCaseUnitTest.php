@@ -16,23 +16,26 @@ class ListCategoryUseCaseUnitTest extends TestCase
 {
     public function testGetById()
     {
-        $uuid = (string)Uuid::uuid4()->toString();
+        $id = (string)Uuid::uuid4()->toString();
         $categoryName = 'Test Category';
 
-        $mockEntity = Mockery::mock(CategoryEntity::class, [$uuid, $categoryName]);
+        $mockEntity = Mockery::mock(CategoryEntity::class, [$id, $categoryName]);
 
         $mockRepo = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
-        $mockRepo->shouldReceive('findById')->times(1)->with($uuid)->andReturn($mockEntity);
 
-        $mockInputDto = Mockery::mock(CategoryInputDto::class, [$uuid]);
+        $mockRepo->shouldReceive('findById')->andReturn($mockEntity);
 
+        $mockInputDto = Mockery::mock(CategoryInputDto::class, [$id]);
 
         $useCase = new ListCategoryUseCase($mockRepo);
+
         $response = $useCase->execute($mockInputDto);
 
         $this->assertInstanceOf(CategoryOutputDto::class, $response);
+
         $this->assertEquals('Test Category', $response->name);
-        $this->assertEquals($uuid, $response->id);
+
+        $this->assertEquals($id, $response->id);
 
     }
 

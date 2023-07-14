@@ -22,15 +22,21 @@ class ListCategoriesUseCase {
             totalPage: $input->totalPage);
 
 
-         return new ListCategoriesOutputDto(
-             items: $categories->items(),
-             total: $categories->total(),
-             last_page: $categories->lastPage(),
-             first_page: $categories->firstPage(),
-             per_page: $categories->perPage(),
-             to: $categories->to(),
-             from: $categories->from()
-         );
+        return new ListCategoriesOutputDto(
+            items: array_map(function($data){
+                return [
+                    'id' => $data->id,
+                    'name' => $data->name,
+                    'description' => $data->description,
+                    'is_active' => $data->is_active
+                ];
+            },  $categories->items()),
+                total: $categories->total(),
+                last_page: $categories->lastPage(),
+                first_page: $categories->firstPage(),
+                per_page: $categories->perPage(),
+                to: $categories->to(),
+                from: $categories->from());
     }
 
 
