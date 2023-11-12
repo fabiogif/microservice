@@ -14,7 +14,6 @@ class CreateCategoryUseCase
 
     public function __construct(protected CategoryRepositoryInterface $repository)
     {
-        $this->repository = $repository;
     }
 
     public function execute(CategoryCreateInputDto $input): CategoryCreateOutputDto
@@ -24,6 +23,7 @@ class CreateCategoryUseCase
             description: $input->description,
             isActive: $input->isActive,
         );
+
         $newCategory =  $this->repository->insert($category);
 
         return new CategoryCreateOutputDto(

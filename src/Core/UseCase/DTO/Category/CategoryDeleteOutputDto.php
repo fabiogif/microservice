@@ -2,9 +2,10 @@
 
 namespace Core\UseCase\DTO\Category;
 
-class CategoryInputDto
+class CategoryDeleteOutputDto
 {
     public function __construct(
-        public string $id = "",
-    ) { }
+        public bool $success
+    ) {
+    }
 }
